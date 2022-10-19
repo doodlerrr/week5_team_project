@@ -41,5 +41,3 @@ Like.associate(db);
 
 
 module.exports = db;
-
-
