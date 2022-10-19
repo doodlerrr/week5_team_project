@@ -1,4 +1,5 @@
-// repositories/posts.repository.js
+// /repositories/posts.repository.js
+
 const { Post, Like } = require('../models');
 
 class PostRepository {
