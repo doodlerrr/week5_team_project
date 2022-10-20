@@ -23,26 +23,20 @@ class UserService {
         return findUserAccountData;
     }
 
-    // 회원가입 --이거 고침
+// 회원가입
     createAccount = async (email, nickname, password) => {
-        const isExistUser = await this.findUserAccount({ email });
-    
-        if ( isExistUser ) {
-            if ( isExistUser.email === email ) {
-                throw new invalidError(
-                    '동일한 email이 이미 존재합니다.'
-                );
-            }
-        
-            const createAccountData = await this.usersRepository.createAccount({
-                email,
-                nickname,
-                password
-            });
-            return createAccountData
-        }
-        ;
-    }
+        const createAccountData = await this.usersRepository.createAccount(
+            email,
+            nickname,
+            password
+        );
+        return {
+            userId: createAccountData.userId,
+            email: createAccountData.email,
+            nickname: createAccountData.nickname,
+            password: createAccountData.password
+        };
+    };
 
     // 로그인
     login = async (email, password) => {

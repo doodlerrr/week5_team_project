@@ -24,6 +24,7 @@ class UsersRepository {
             nickname,
             password
         });
+        console.log(createAccountData)
         return createAccountData;
     };
     
