@@ -2,8 +2,18 @@
 
 const UsersRepository = require('../repositories/users.repository');
 
+class invalidError extends Error {
+    constructor(message, status) {
+        super(message);
+        this.status = status || 409 ;
+        this.name = 'InvalidError'
+        if (!message) this.message = "요청한 데이터가 없습니다."
+    }
+}
+
 class UserService {
-    usersRepository = new UsersRepository(); 
+    usersRepository = new UsersRepository();
+    
     // 유저 정보 찾기
     findUserAccount = async (email, nickname) => {
         const findUserAccountData = await this.usersRepository.findUserAccount(
@@ -13,20 +23,26 @@ class UserService {
         return findUserAccountData;
     }
 
-    // 회원가입
+    // 회원가입 --이거 고침
     createAccount = async (email, nickname, password) => {
-        const createAccountData = await this.usersRepository.createAccount(
-            email,
-            nickname,
-            password
-        );
-        return {
-            userId: createAccountData.userId,
-            email: createAccountData.email,
-            nickname: createAccountData.nickname,
-            password: createAccountData.password
-        };
-    };
+        const isExistUser = await this.findUserAccount({ email });
+    
+        if ( isExistUser ) {
+            if ( isExistUser.email === email ) {
+                throw new invalidError(
+                    '동일한 email이 이미 존재합니다.'
+                );
+            }
+        
+            const createAccountData = await this.usersRepository.createAccount({
+                email,
+                nickname,
+                password
+            });
+            return createAccountData
+        }
+        ;
+    }
 
     // 로그인
     login = async (email, password) => {
