@@ -1,7 +1,7 @@
 // routes/comments.routes.js
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middlewares/auth-Middleware');
+const authMiddleware = require('../middlewares/auth-middleware');
 
 const CommentsController = require('../controllers/comments.controller');
 const commentsController = new CommentsController();
