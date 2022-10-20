@@ -2,6 +2,7 @@ const UsersRepository = require('../../../repositories/users.repository')
 const { findUserInsertSchema,createUserInsertSchemaByRepository,loginUserSchemaByRepository } = require('../../fixtures/users.fixtures');
 const { Op } = require('sequelize')
 
+
 const mockUsersModel = () => ({
     findAll: jest.fn(),
     findOne: jest.fn(),
@@ -10,7 +11,7 @@ const mockUsersModel = () => ({
 });
 
 
-describe('users.repository Layer 테스트', () => {
+describe('users.repository Layer 테스트', function () {
     let usersRepository = new UsersRepository();
     usersRepository.Users = mockUsersModel();
     
@@ -18,7 +19,7 @@ describe('users.repository Layer 테스트', () => {
         jest.resetAllMocks();
     });
     
-    //유저 정보 조회 by 이메일과 닉네임
+    //유저 정보 조회 by 이메일과 닉네임  -- data가 자꾸 object형식으로 key값으로 들어가버림..확인필요
     test('findUserAccount 메소드 toHaveBeenCalled 사용', async () => {
         const users = await usersRepository.findUserAccount(findUserInsertSchema);
         
@@ -36,7 +37,7 @@ describe('users.repository Layer 테스트', () => {
         });
     });
     
-    //회원가입
+    //회원가입-- data가 자꾸 object형식으로 key값으로 들어가버림..확인필요
     test('createAccount 메소드 toHaveBeenCalled사용', async () => {
         const users = await usersRepository.createAccount(
             createUserInsertSchemaByRepository
@@ -45,35 +46,23 @@ describe('users.repository Layer 테스트', () => {
         //create 메소드 몇번 호출횟수를 검증합니다.
         expect(usersRepository.Users.create).toHaveBeenCalledTimes(1);
         
+
         //create 메소드가 호출된 인자를 검증합니다.
         expect(usersRepository.Users.create).toHaveBeenCalledWith(
             createUserInsertSchemaByRepository);
     });
     
-    //로그인
+    //로그인-- data가 자꾸 object형식으로 key값으로 들어가버림..확인필요
     test('login 메소드', async () => {
         const users = await usersRepository.login(loginUserSchemaByRepository)
-        // const a = loginUserSchemaByRepository.email
-        // const b = loginUserSchemaByRepository.password
 
         expect(usersRepository.Users.findOne).toHaveBeenCalledWith({
             where : {
-                email : "asdlkf124j@naver.com",
-                password : "1234"
+                email : loginUserSchemaByRepository.email,
+                password : loginUserSchemaByRepository.password
             }
             
         });
-        
     });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 })
